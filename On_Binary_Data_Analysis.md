@@ -29,6 +29,43 @@ LCA分析，即潜在类别分析，是通过条件概率公式，反推出具�
 
 按照前文所叙的思路，我们现在将要实现这个模型。
 
-python中没有直接进行LCA模型的库，一方面是LCA模型比较小众，另一方面是因为对于LCA模型涉及到的条件概率计算来说，python并非最好的选择。这个时候我们需要用到另一种数据分析软件 - R/RStudio以及R Package DepMixS4
+python中没有直接进行LCA模型分析的库，一方面是LCA模型比较小众，另一方面是因为对于LCA模型涉及到的条件概率计算来说，python并非最好的选择。这个时候我们需要用到另一种数据分析软件 - R/RStudio以及R Package DepMixS4 (v. 1.4.0)
+
+```
+depmixS4: Dependent Mixture Models - Hidden Markov Models of GLMs and Other Distributions in S4
+URL: https://cran.r-project.org/web/packages/depmixS4/index.html
+官方文档：https://www.rdocumentation.org/packages/depmixS4/versions/1.4-0
+
+```
+
+R Package DepMixS4是设计用于潜在马尔可夫模型类的建模处理的，因此LCA模型用它来做非常合适。
+
+* 此处应该注意，当没有连接VPN时，这个package无法安装。我们有理由相信，大量像DepMixS4这样不错的package因为这个原因无法出现在大众的视野当中，倘若善加利用，R的用处应该会更大。
+
+### Get Started!
+
+首先，安装并Library DepMixS4 Package：
+
+```{r}
+install.packages("depmixS4")
+library("depmixS4")
+```
+
+对于这个LCA模型，我们需要预设潜在的class数量，也就是说，我们需要设定有多少种类型的用户，建模会围绕这个数量展开。这一步代码如下：
+
+```
+#model 1 with class = 6 / 设定Model 1拥有6种潜在客户类型
+
+lca <- read.table("community_related_lca.csv", sep=",") #读取csv数据集
+
+names(lca) <- c( "cash_n", "zf_n", "cf_n", "zz_n" ,"cc_n", "jf_n", "dk_n","sz_pv","zz_pv","zh_pv", "chc_pv",  "lc_pv","jj_pv",xd_pv","sh_pv","hd_pv") #将全部变量名称写入向量之中。
+
+summary(lca) # 输出对数据集的大致描述。
+```
+
+其中，summary(lca)的输出结果是这样：
+
+
+
 
 

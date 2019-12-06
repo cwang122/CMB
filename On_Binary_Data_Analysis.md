@@ -42,7 +42,7 @@ URL: https://cran.r-project.org/web/packages/depmixS4/index.html
 
 R Package DepMixS4是设计用于潜在马尔可夫模型类的建模处理的，因此LCA模型用它来做非常合适。
 
-* 此处应该注意，当没有连接VPN时，这个package无法安装。我们有理由相信，大量像DepMixS4这样不错的package因为这个原因无法出现在大众的视野当中，倘若这些package善加利用，R的用处应该会更大。
+* 此处应该注意，当没有连接VPN时，这个package无法安装。我们有理由相信，大量像DepMixS4这样不错的package因为这个原因无法出现在大众的视野当中，倘若这些package能够被利用起来，R的用处在国内应该会更大。
 
 ### Get Started!
 
@@ -72,6 +72,7 @@ summary(lca) # 输出对数据集的大致描述。
 图片中的xxx_n和xxx_pv即是指上面代码中names()里的16中变量，意指用户表现出的16种行为。0为没有表现，1为曾经表现过。不难看出，大多数变量的0都远远超过1的数量，这种数据集即可被形容为“sparse”（稀疏的）数据集。
 
 > "Sparse" in binary dataset, means there are few 1s, with an ocean of 0s.  --- Anonymous on ResearchGate
+
 > 二元数据集里的所谓“稀疏”，即意味着少部分的1，和汪洋大海一般的0. --- ResearchGate上某位老哥
 
 ### 关于LCA聚类的快速Q&A~
@@ -83,6 +84,50 @@ A：如同大多数问卷调查一样，从心理学到社会学，都并非事�
 Q: 聚类数量设定多少算合适呢？
 
 A: 和上面的回答相似，只要在具体环境下，这个聚类的行为概率构成可以被解释的通，并且每个用户对于不同行为聚类发生概率的差异足够明显就可以了。这个设定完全处于实际情境的需要。
+
+### 建立模型
+
+当数据集成功被导入，并且我们对其有一个大致了解后，便可以建立模型了。
+
+```
+mod1 <- mix(list(cash_n~1, zf_n~1, cf_n~1, zz_n~1,cc_n~1,jf_n~1,dk_n~1,sz_pv~1,zz_pv~1,zh_pv~1,chc_pv~1, lc_pv~1,jj_pv~1,xd_pv~1,sh_pv~1,hd_pv~1),
+             data=lca, # the dataset to use
+             nstates=3, # the number of latent classes
+             family=list(multinomial("identity"), multinomial("identity"), multinomial("identity"),
+                         multinomial("identity"),multinomial("identity"),multinomial("identity"),
+                         multinomial("identity"),multinomial("identity"),multinomial("identity"),
+                         multinomial("identity"),multinomial("identity"),multinomial("identity"),
+                         multinomial("identity"),multinomial("identity"),multinomial("identity"),
+                         multinomial("identity")),
+             respstart=runif(144))
+
+fmod1 <- fit(mod1, verbose=FALSE)
+summary(fmod1)
+```
+
+*如果对所使用函数有任何疑问，请对应上面package中的官方文档。
+
+其中，mix函数即为模型函数，list()包含了模型中的16种变量，对应底下family的数量。这个函数中关键的变量有两个：nstates=(),和respstart(),第一个是人为输入的聚类数量，第二种是模型中的参数总数，这个总数如果输入不对的话，算法会自动提醒你正确的数量，因此不用担心。
+
+fit()即是建模函数，summary是我们想看的输出结果。
+
+当设定的聚类数量越多，聚类函数所需要的时间也会快速增加，从3个聚类约花5分钟到16个聚类约花1.5小时左右不等。
+
+结果如下：
+
+```
+> fmod1 <- fit(mod1, verbose=FALSE)
+converged at iteration 93 with logLik: -379670.9 
+```
+
+
+
+
+
+
+
+
+
 
 
 

@@ -416,7 +416,7 @@ St10 0.4530769 0.0000000000
 
 在我们做这件事之前，请先浏览聚类的结果：
 
-![r_output_3](https://github.com/cwang122/CMB/blob/master/s_1.jpg)
+![r_output_3](https://github.com/cwang122/CMB/blob/master/IMG_2330.jpg)
 
 
 
